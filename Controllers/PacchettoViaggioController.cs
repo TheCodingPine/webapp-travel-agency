@@ -12,33 +12,58 @@ namespace webapp_travel_agency.Controllers
 {
     public class PacchettoViaggioController : Controller
     {
-/* --------------------------MAGIA NERA--------------------
-        // GET: PacchettoViaggio
-        public async Task<IActionResult> Index()
+
+        [HttpGet]
+        public IActionResult Index()
         {
-              return _context.PacchettoViaggio != null ? 
-                          View(await _context.PacchettoViaggio.ToListAsync()) :
-                          Problem("Entity set 'webapp_travel_agencyContext.PacchettoViaggio'  is null.");
-        }*/
+            List<PacchettoViaggio> elencoViaggi = new List<PacchettoViaggio>();
 
-        // GET: PacchettoViaggio/Details/5
+            using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+            {
+                elencoViaggi = db.PacchettoViaggio.ToList<PacchettoViaggio>();
+            }
+            return View(elencoViaggi);
+        }
 
-
+        /*----------------------------------------------------------------------------------------------------------------------------*/
 
 
         [HttpGet]
-        public IActionResult Details(int Id)
+        public IActionResult Create()
         {
-            PacchettoViaggio packTrovato = GetPostById(Id)
-
-                if (packTrovato != null)
-            {
-                return View("Details", packTrovato);
-            } else
-            {
-                return NotFound("Non esiste un PAcchetto con ID" + Id);
-            }
+            PacchettoViaggio model = new PacchettoViaggio();
+            return View("Create", model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(PacchettoViaggio data)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", data);
+            }
+
+            using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+            {
+                PacchettoViaggio nuovoViaggio = new PacchettoViaggio();
+                nuovoViaggio.NomePacchetto = data.NomePacchetto;
+                nuovoViaggio.Descrizione = data.Descrizione;
+                nuovoViaggio.Prezzo = data.Prezzo;
+                nuovoViaggio.UrlImmagine = data.UrlImmagine;
+
+                db.Add(nuovoViaggio);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
 
 
 
