@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using webapp_travel_agency.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<webapp_travel_agencyContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("webapp_travel_agencyContext") ?? throw new InvalidOperationException("Connection string 'webapp_travel_agencyContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-
-
-
 namespace webapp_travel_agency.Models
 {
+    [Table("PacchettiViaggio")]
+    [Index(nameof(NomePacchetto), IsUnique =true)]
     public class PacchettoViaggio
     {
         [Key]
@@ -25,6 +24,7 @@ namespace webapp_travel_agency.Models
 
         [Required(ErrorMessage ="E' obbligatorio inserire un'immagine")]
         [Url(ErrorMessage = "URL non valido")]
+        [Column("url_pack")]
         public string UrlImmagine { get; set; }
 
         public PacchettoViaggio ()
