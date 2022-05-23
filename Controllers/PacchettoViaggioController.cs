@@ -59,11 +59,86 @@ namespace webapp_travel_agency.Controllers
             return RedirectToAction("Index");
         }
 
+        /*----------------------------------------------------------------------------------------------------------------------------*/
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
 
 
+            using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+            {
+                try
+                {
+                    PacchettoViaggio viaggioFound = db.PacchettoViaggio
+                        //https://www.entityframeworktutorial.net/querying-entity-graph-in-entity-framework.aspx
+                        .Where(x => x.Id == id)
+                        .First();
+                    return View("Details", viaggioFound);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return NotFound("Pacchetto inesistente");
+                }
 
+            }
+        }
 
+        /*----------------------------------------------------------------------------------------------------------------------------*/
 
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+            {
+                try
+                {
+                    PacchettoViaggio pacchettoViaggio = db.PacchettoViaggio
+                        .Where(x => x.Id == id)
+                        .First();
+                    return View("Edit", pacchettoViaggio);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return NotFound("Non esiste il pacchetto " + id + ". E' fisicamente un pacchetto?");
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, PacchettoViaggio model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", model);
+            }
+
+            PacchettoViaggio PackDaModificare = null;
+
+            using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+            {
+                PackDaModificare = db.PacchettoViaggio
+                    .Where(viaggio => viaggio.Id == id)
+                    .First();
+
+                if (PackDaModificare == null)
+                {
+                    return NotFound("Il pacchetto viaggio non è fisicamente un pacchetto");
+                }
+                else
+                {
+                    PackDaModificare.NomePacchetto = model.NomePacchetto;
+                    PackDaModificare.Descrizione = model.Descrizione;
+                    PackDaModificare.Prezzo = model.Prezzo;
+                    PackDaModificare.UrlImmagine = model.UrlImmagine;
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+            }
+        }
 
 
 
