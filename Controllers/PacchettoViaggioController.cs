@@ -25,7 +25,7 @@ namespace webapp_travel_agency.Controllers
             return View(elencoViaggi);
         }
 
-        /*----------------------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------create--------------------------------------------------------------------------------------*/
 
 
         [HttpGet]
@@ -58,8 +58,8 @@ namespace webapp_travel_agency.Controllers
 
             return RedirectToAction("Index");
         }
-
-        /*----------------------------------------------------------------------------------------------------------------------------*/
+        
+        /*-------------------------------------read---------------------------------------------------------------------------------------*/
 
         [HttpGet]
         public IActionResult Details(int id)
@@ -84,7 +84,7 @@ namespace webapp_travel_agency.Controllers
             }
         }
 
-        /*----------------------------------------------------------------------------------------------------------------------------*/
+        /*----------------------------------------update------------------------------------------------------------------------------------*/
 
         [HttpGet]
         public IActionResult Edit(int id)
@@ -139,9 +139,51 @@ namespace webapp_travel_agency.Controllers
                 }
             }
         }
+        /*----------------------------------------delete------------------------------------------------------------------------------------*/
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+            {
+                try
+                {
+                    PacchettoViaggio pacchettoViaggio = db.PacchettoViaggio
+                        .Where(x => x.Id == id)
+                        .First();
+                    return View("Delete", pacchettoViaggio);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return NotFound("Non esiste il pacchetto " + id + ". E' fisicamente un pacchetto?");
+                }
+            }
+        }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id, PacchettoViaggio model)
+        {
+            using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+            {
+                PacchettoViaggio PackDaCancellare = db.PacchettoViaggio
+                    .Where(viaggio => viaggio.Id == id)
+                    .First();
 
+                if (PackDaCancellare != null)
+                {
+                    db.PacchettoViaggio.Remove(PackDaCancellare);
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return NotFound("Il pacchetto viaggio non è fisicamente un pacchetto.");
+                }
+            }
+        }
 
 
 
