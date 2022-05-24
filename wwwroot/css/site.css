@@ -16,3 +16,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+.custom {
+    width: 85px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
