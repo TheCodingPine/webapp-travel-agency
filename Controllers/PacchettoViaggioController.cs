@@ -95,7 +95,7 @@ namespace webapp_travel_agency.Controllers
                 {
                     PacchettoViaggio pacchettoViaggio = db.PacchettoViaggio
                         .Where(x => x.Id == id)
-                        .First();
+                        .Single();
                     return View("Edit", pacchettoViaggio);
                 }
                 catch (InvalidOperationException ex)
@@ -120,7 +120,7 @@ namespace webapp_travel_agency.Controllers
             {
                 PackDaModificare = db.PacchettoViaggio
                     .Where(viaggio => viaggio.Id == id)
-                    .First();
+                    .Single();
 
                 if (PackDaModificare == null)
                 {
@@ -151,7 +151,7 @@ namespace webapp_travel_agency.Controllers
                 {
                     PacchettoViaggio pacchettoViaggio = db.PacchettoViaggio
                         .Where(x => x.Id == id)
-                        .First();
+                        .Single();
                     return View("Delete", pacchettoViaggio);
                 }
                 catch (InvalidOperationException ex)
@@ -170,7 +170,7 @@ namespace webapp_travel_agency.Controllers
             {
                 PacchettoViaggio PackDaCancellare = db.PacchettoViaggio
                     .Where(viaggio => viaggio.Id == id)
-                    .First();
+                    .Single();
 
                 if (PackDaCancellare != null)
                 {

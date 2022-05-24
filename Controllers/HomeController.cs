@@ -12,12 +12,26 @@ namespace webapp_travel_agency.Controllers
 {
     public class HomeController : Controller
     {
-        
-            [HttpGet]
+
+            [HttpGet] //-------------------------homepage senza API, almeno si vede
+            public IActionResult Index()
+            {
+                List<PacchettoViaggio> elencoViaggi = new List<PacchettoViaggio>();
+
+                using (webapp_travel_agencyContext db = new webapp_travel_agencyContext())
+                {
+                    elencoViaggi = db.PacchettoViaggio.ToList<PacchettoViaggio>();
+                }
+                return View(elencoViaggi);
+
+            }
+
+
+      /*      [HttpGet]
             public IActionResult Index()
             {
                 return View("Index");
-            }
+            }*/
 
             [HttpGet]
             public IActionResult Details(int id)
